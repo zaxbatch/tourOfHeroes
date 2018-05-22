@@ -54,6 +54,17 @@ addHero (hero: Hero): Observable<Hero> {
   );
 }
 
+/** DELETE: delete the hero from the server */
+deleteHero (hero: Hero | number): Observable<Hero> {
+  const id = typeof hero === 'number' ? hero : hero.id;
+  const url = `${this.heroesUrl}/${id}`;
+
+  return this.http.delete<Hero>(url, httpOptions).pipe(
+    tap(_ => this.log(`deleted hero id=${id}`)),
+    catchError(this.handleError<Hero>('deleteHero'))
+  );
+}
+
 /*
   getHero(id: number): Observable<Hero> {
   // TODO: send the message _after_ fetching the hero
